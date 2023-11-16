@@ -22,5 +22,5 @@ const Container = styled.div`
   justify-content: space-between;
   width: 386px;
   height: 100%;
-  margin: 0 auto;
+  margin: 10px auto;
 `;
