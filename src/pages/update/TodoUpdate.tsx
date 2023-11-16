@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 const TodoUpdate = () => {
   const [todo, setTodo] = useState({ title: '', content: '', updatedAt: '' });
@@ -43,23 +43,22 @@ const TodoUpdate = () => {
   return (
     <Content>
       <DetailForm id="detail" onSubmit={handleSubmit}>
-        <UpdateHeader>
-          <input
-            name="title"
-            autoFocus
-            value={todo.title}
-            onChange={(e) => setTodo({ ...todo, title: e.target.value })}
-          />
-          <p id="detailHeaderCreatedAt">Last updated: {todo.updatedAt}</p>
-        </UpdateHeader>
+        <DetailTitle
+          autoFocus
+          required
+          value={todo.title}
+          placeholder="제목을 입력해주세요."
+          onChange={(e) => setTodo({ ...todo, title: e.target.value })}
+        />
         <DetailTextArea
           name="content"
-          id="detailMain"
+          placeholder="내용을 입력해주세요."
           value={todo.content}
           onChange={(e) => setTodo({ ...todo, content: e.target.value })}
         />
         <DetailFooter>
-          <EditButton id="editBtn">수정하기</EditButton>
+          <button type="submit">수정하기</button>
+          <Link to={`/info?_id=${_id}`}>돌아가기</Link>
         </DetailFooter>
       </DetailForm>
     </Content>
@@ -69,7 +68,6 @@ const TodoUpdate = () => {
 export default TodoUpdate;
 
 const Content = styled.div`
-  position: relative;
   width: 100%;
   padding: 10px;
   height: 715px;
@@ -86,25 +84,12 @@ const DetailForm = styled.form`
   gap: 10px;
 `;
 
-const UpdateHeader = styled.div`
+const DetailTitle = styled.input`
   background-color: white;
-  text-align: center;
   border-radius: 10px;
-  & > input {
-    border: 0;
-    text-align: center;
-    font-size: 26px;
-    font-weight: inherit;
-  }
-  & > input:focus {
-    outline-style: none;
-    box-shadow: none;
-    border-color: transparent;
-    border-bottom: 1px solid #555555;
-  }
-  & > p {
-    font-size: 10px;
-  }
+  border: none;
+  font-size: 20px;
+  padding: 10px;
 `;
 
 const DetailTextArea = styled.textarea`
@@ -116,18 +101,15 @@ const DetailTextArea = styled.textarea`
   flex: 1;
   padding: 10px;
   border-radius: 10px;
-  &:focus {
-    outline-style: none;
-    box-shadow: none;
-    border-color: transparent;
-  }
 `;
 
 const DetailFooter = styled.div`
   display: flex;
   gap: 10px;
   justify-content: space-between;
-  & > button {
+
+  & > button,
+  a {
     height: 50px;
     flex: 1;
     border-radius: 7px;
@@ -135,17 +117,23 @@ const DetailFooter = styled.div`
     font-size: 30px;
     font-weight: bold;
     background-color: white;
+    text-decoration: none;
+    color: black;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  & > button:focus {
+
+  & > button:focus,
+  a:focus {
     outline-style: none;
     box-shadow: none;
     border-color: transparent;
   }
-`;
 
-const EditButton = styled.button`
-  &:hover {
+  & > button:hover,
+  a:hover {
     background-color: #555;
     color: white;
     border: 1px solid white;
