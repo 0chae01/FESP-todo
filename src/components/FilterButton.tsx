@@ -22,7 +22,7 @@ const FilterButton = ({ value }: FilterButtonProps) => {
 export default FilterButton;
 
 const StyledFilterButton = styled.button`
-  color: ${(props) => (props.className === 'active' ? 'green' : 'black')};
+  color: ${(props) => (props.className === 'active' ? '#015ECC' : 'black')};
   font-size: 20px;
   font-weight: 700;
   background: none;

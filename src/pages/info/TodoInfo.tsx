@@ -148,7 +148,7 @@ const DetailFooter = styled.section`
     font-size: 30px;
     font-weight: bold;
     background-color: white;
-    color: #9c0000;
+    color: #b30000;
     cursor: pointer;
 
     &:focus {
@@ -157,7 +157,7 @@ const DetailFooter = styled.section`
       border-color: transparent;
     }
     &:hover {
-      background-color: #9c0000;
+      background-color: #b30000;
       color: white;
       border: 1px solid white;
     }
