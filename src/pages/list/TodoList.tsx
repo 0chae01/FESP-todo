@@ -54,6 +54,7 @@ const TodoList = () => {
         <FilterButton value={'Done'} />
       </div>
       <TodoListContainer>
+        <RegistButton to={'/regist'}>+</RegistButton>
         <ul>
           {todoList
             ?.filter((todoItem) => {
@@ -71,7 +72,6 @@ const TodoList = () => {
               </TodoItem>
             ))}
         </ul>
-        <RegistButton to={'/regist'}>등록</RegistButton>
       </TodoListContainer>
     </>
   );
@@ -80,20 +80,20 @@ const TodoList = () => {
 export default TodoList;
 
 const TodoListContainer = styled.div`
-  position: relative;
   width: 100%;
+  height: 600px;
   padding: 10px;
-  height: 715px;
   background-color: #555555;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
 
   ul {
     margin: 0;
     padding: 0;
-    overflow: auto;
+    overflow-y: scroll;
     height: 90%;
     border-radius: 5px;
-    margin-top: 5px;
   }
 `;
 
@@ -101,12 +101,11 @@ const TodoItem = styled.li`
   width: 100%;
   height: 52px;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  gap: 20px;
-  text-align: center;
   background-color: white;
   border-radius: 10px;
-  padding: 0 8px;
+  padding-left: 8px;
   margin-bottom: 15px;
   font-weight: 300;
   font-size: 18px;
@@ -119,19 +118,20 @@ const TodoItem = styled.li`
     border: 2px solid #555;
     appearance: none;
     cursor: pointer;
-    flex-shrink: 0;
     display: flex;
   }
   a {
+    color: black;
     width: 100%;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
     white-space: nowrap;
-    overflow: hidden;
-
+    overflow: auto;
     text-overflow: ellipsis;
     text-decoration: none;
-    color: black;
-    display: flex;
-    justify-content: center;
+    margin-left: 10px;
   }
 
   &.done > a {
@@ -147,20 +147,18 @@ const TodoItem = styled.li`
 `;
 
 const RegistButton = styled(Link)`
-  position: absolute;
-  left: 50%;
-  right: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
-
-  width: 360px;
-  padding: 10px 0;
+  width: 100%;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
   border-radius: 10px;
-  border: 0;
-  font-size: 30px;
+  border: 1px solid white;
+  font-size: 40px;
   font-weight: bold;
   text-decoration: none;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   color: #555555;
   background-color: #efefef;

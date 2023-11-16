@@ -33,7 +33,7 @@ const TodoRegist = () => {
             type="text"
             name="title"
             placeholder="제목을 입력해주세요."
-            required
+            // required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -71,6 +71,7 @@ const FieldSet = styled.fieldset`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   padding: 0;
   border: 0;
   row-gap: 10px;
@@ -78,16 +79,10 @@ const FieldSet = styled.fieldset`
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
-
-  & > ::placeholder {
-    color: #555555;
-    font-size: 18px;
-    font-weight: 900;
-    text-align: center;
-  }
 `;
 
 const Input = styled.input`
+  font-size: 20px;
   width: 360px;
   height: 52px;
   border-radius: 10px;
