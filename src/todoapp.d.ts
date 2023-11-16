@@ -23,6 +23,6 @@ interface TodoResponse {
   item: TodoItem;
 }
 
-type TodoFilterType = 'All' | 'ing' | 'Done';
+type TodoFilterType = 'All' | 'Active' | 'Done';
 
 type TodoSortType = 'latest' | 'earliest';

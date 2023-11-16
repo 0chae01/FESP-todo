@@ -64,7 +64,7 @@ const TodoList = () => {
         </SortButton>
         <div>
           <FilterButton value={'All'} />
-          <FilterButton value={'ing'} />
+          <FilterButton value={'Active'} />
           <FilterButton value={'Done'} />
         </div>
       </Menu>
@@ -73,7 +73,7 @@ const TodoList = () => {
         <ul>
           {todoList
             ?.filter((todoItem) => {
-              if (filter === 'ing') return !todoItem.done;
+              if (filter === 'Active') return !todoItem.done;
               if (filter === 'Done') return todoItem.done;
               else return true;
             })
