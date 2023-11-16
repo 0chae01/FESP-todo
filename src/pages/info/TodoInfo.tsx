@@ -14,7 +14,7 @@ const TodoInfo = () => {
       setTodoItem(response.data.item);
     } catch (err) {
       console.error(err);
-      return navigate('/err', { replace: true });
+      return navigate('/error', { replace: true });
     }
   };
 
@@ -34,14 +34,14 @@ const TodoInfo = () => {
     if (_id) {
       deleteTodoItem(_id);
     } else {
-      return navigate('/err', { replace: true });
+      return navigate('/error', { replace: true });
     }
   };
 
   useEffect(() => {
     if (_id === null || _id === '') {
       setTodoItem(null);
-      return navigate('/err', { replace: true });
+      return navigate('/error', { replace: true });
     }
     getTodoItem(_id);
   }, []);
@@ -50,11 +50,10 @@ const TodoInfo = () => {
     <DetailContainer>
       <DetailHeader id="header">
         <h2>{todoItem?.title}</h2>
-        <p>created at: {todoItem?.createdAt}</p>
+        <p>{todoItem?.updatedAt}</p>
       </DetailHeader>
       <DetailMain id="main">
         <p>{todoItem?.content}</p>
-        <p>updated at: {todoItem?.updatedAt}</p>
       </DetailMain>
       <DetailFooter>
         <Link to={`/update/${todoItem?._id}`}>수정</Link>
@@ -76,18 +75,17 @@ const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* height: 100%; */
   gap: 10px;
 `;
 
 const DetailHeader = styled.section`
   background-color: white;
-  text-align: center;
   border-radius: 10px;
+  padding: 10px 20px;
 
   & h2 {
     font-size: 26px;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   & p {
@@ -97,24 +95,17 @@ const DetailHeader = styled.section`
 
 const DetailMain = styled.section`
   background-color: white;
-  position: relative;
   flex: 1;
-  height: 80%;
-  padding: 10px;
+  max-height: 80%;
+  overflow-y: auto;
+
+  padding: 20px;
   border-radius: 10px;
 
   p {
     &:first-child {
       display: block;
       height: 95%;
-      max-height: 560px;
-      margin-bottom: 10px;
-      padding: 10px;
-      overflow: auto;
-    }
-    &:last-child {
-      font-size: 12px;
-      text-align: end;
     }
   }
 `;

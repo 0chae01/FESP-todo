@@ -65,7 +65,11 @@ const TodoList = () => {
             .map((todoItem) => (
               <TodoItem key={todoItem._id} className={todoItem.done ? 'done' : ''}>
                 <div onClick={() => toggleCheckbox(todoItem._id, todoItem.done)}>
-                  <input type="checkbox" id="checkbox" className={todoItem.done ? 'done' : ''} />
+                  <input
+                    type="checkbox"
+                    id={todoItem._id.toString()}
+                    className={todoItem.done ? 'done' : ''}
+                  />
                   {todoItem.done ? <RedArrowIcon /> : null}
                 </div>
                 <Link to={`/info?_id=${todoItem._id}`}>{todoItem.title}</Link>
@@ -131,7 +135,7 @@ const TodoItem = styled.li`
     overflow: auto;
     text-overflow: ellipsis;
     text-decoration: none;
-    margin-left: 10px;
+    margin: 0 10px;
   }
 
   &.done > a {
