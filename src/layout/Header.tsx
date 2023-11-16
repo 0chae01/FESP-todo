@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Header = () => {
@@ -37,19 +36,20 @@ export default Header;
 const HeaderTitle = styled.header`
   & a {
     margin-top: 80px;
-    color: black
+    color: black;
     font-weight: 900;
-    font-size: 68px;
+    font-size: 50px;
     cursor: pointer;
 
-    &:visited{
-      color: black
+    &:visited {
+      color: black;
     }
   }
 
   & h2 {
     text-align: center;
-    font-size: 36px;
+    font-size: 24px;
     font-weight: 400;
+    margin-bottom: 10px;
   }
 `;
