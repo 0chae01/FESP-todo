@@ -24,9 +24,5 @@ const Container = styled.div`
   justify-content: space-between;
   width: 386px;
   height: 100%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
-  right: 50vh;
+  margin: 0 auto;
 `;

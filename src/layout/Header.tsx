@@ -9,7 +9,7 @@ const Header = () => {
   useEffect(() => {
     switch (location.pathname.split('/')[1]) {
       case '':
-        setPathName('목록조회');
+        setPathName('');
         return;
       case 'info':
         setPathName('상세정보');
@@ -26,7 +26,7 @@ const Header = () => {
   return (
     <HeaderTitle>
       <Link to={'/'}>TODO</Link>
-      <h2>{pathName}</h2>
+      {pathName && <h2>{pathName}</h2>}
     </HeaderTitle>
   );
 };
@@ -34,8 +34,12 @@ const Header = () => {
 export default Header;
 
 const HeaderTitle = styled.header`
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   & a {
-    margin-top: 80px;
     color: black;
     font-weight: 900;
     font-size: 50px;
@@ -50,6 +54,6 @@ const HeaderTitle = styled.header`
     text-align: center;
     font-size: 24px;
     font-weight: 400;
-    margin-bottom: 10px;
+    padding: 0 10px;
   }
 `;

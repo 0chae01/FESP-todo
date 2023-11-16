@@ -49,7 +49,7 @@ export default TodoRegist;
 const Content = styled.div`
   width: 100%;
   padding: 10px;
-  height: 715px;
+  height: 670px;
   background-color: #555555;
   border-radius: 10px;
 `;

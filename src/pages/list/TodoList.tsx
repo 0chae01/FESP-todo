@@ -103,7 +103,7 @@ const Menu = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: 4px 0;
+  margin: 10px 0;
 `;
 
 const SortButton = styled.div`
