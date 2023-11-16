@@ -1,7 +1,6 @@
 import './App.css';
 import Header from '@/layout/Header';
 import { Outlet } from 'react-router-dom';
-import Footer from '@/layout/Footer';
 import { styled } from 'styled-components';
 
 function App() {
@@ -9,7 +8,6 @@ function App() {
     <Container>
       <Header />
       <Outlet />
-      <Footer />
     </Container>
   );
 }
