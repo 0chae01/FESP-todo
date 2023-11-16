@@ -26,9 +26,8 @@ const StyledFilterButton = styled.button`
   font-size: 20px;
   font-weight: 700;
   background: none;
-  width: 100px;
   border: none;
   padding: 4px;
-  margin: 0 10px;
+  margin-left: 8px;
   cursor: pointer;
 `;

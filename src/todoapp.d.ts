@@ -24,3 +24,5 @@ interface TodoResponse {
 }
 
 type TodoFilterType = 'All' | 'ing' | 'Done';
+
+type TodoSortType = 'latest' | 'earliest';

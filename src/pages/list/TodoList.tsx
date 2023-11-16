@@ -4,19 +4,21 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import RedArrowIcon from '@/assets/RedArrowIcon';
 import FilterButton from '@/components/FilterButton';
-import { useRecoilValue } from 'recoil';
-import { todoFilterAtom } from '@/recoil/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { todoFilterAtom, todoSortAtom } from '@/recoil/atom';
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
   const filter = useRecoilValue(todoFilterAtom);
+  const [sortBy, setSortBy] = useRecoilState(todoSortAtom);
 
   const getTodoList = async () => {
     try {
       const response = await axios.get<TodoListResponse>('http://localhost:33088/api/todolist');
-      setTodoList(response.data.items);
+      if (response.data.ok === 1) return response.data.items;
     } catch (err) {
       console.error(err);
+      return alert('불러오기에 실패했습니다. 다시 실행해주세요.');
     }
   };
 
@@ -38,21 +40,34 @@ const TodoList = () => {
   const toggleCheckbox = async (_id: number, done: boolean) => {
     const data = await patchTodoList(_id, done);
     if (data) {
-      getTodoList();
+      const todoItems = await getTodoList();
+      todoItems && setTodoList(todoItems);
     }
   };
 
+  const sortItems = (a: TodoItem, b: TodoItem) => {
+    const latest = new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    return sortBy === 'latest' ? latest : -latest;
+  };
+
   useEffect(() => {
-    getTodoList();
+    getTodoList().then((todoItems) => {
+      todoItems && setTodoList(todoItems.sort(sortItems));
+    });
   }, []);
 
   return (
     <>
-      <div>
-        <FilterButton value={'All'} />
-        <FilterButton value={'ing'} />
-        <FilterButton value={'Done'} />
-      </div>
+      <Menu>
+        <SortButton onClick={() => setSortBy(sortBy === 'latest' ? 'earliest' : 'latest')}>
+          {sortBy === 'latest' ? '최신순' : '과거순'}
+        </SortButton>
+        <div>
+          <FilterButton value={'All'} />
+          <FilterButton value={'ing'} />
+          <FilterButton value={'Done'} />
+        </div>
+      </Menu>
       <TodoListContainer>
         <RegistButton to={'/regist'}>+</RegistButton>
         <ul>
@@ -62,6 +77,7 @@ const TodoList = () => {
               if (filter === 'Done') return todoItem.done;
               else return true;
             })
+            .sort(sortItems)
             .map((todoItem) => (
               <TodoItem key={todoItem._id} className={todoItem.done ? 'done' : ''}>
                 <div onClick={() => toggleCheckbox(todoItem._id, todoItem.done)}>
@@ -82,6 +98,25 @@ const TodoList = () => {
 };
 
 export default TodoList;
+
+const Menu = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+`;
+
+const SortButton = styled.div`
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  background-color: #015ecc;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
 
 const TodoListContainer = styled.div`
   width: 100%;
@@ -141,7 +176,7 @@ const TodoItem = styled.li`
   &.done > a {
     text-decoration: line-through;
     color: white;
-    text-decoration-color: #9c0000;
+    text-decoration-color: white;
   }
 
   &.done {
