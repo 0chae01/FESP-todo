@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <HeaderTitle>
-      <Link to={'/'}>TODO 4 ME</Link>
+      <Link to={'/'}>TODO</Link>
       <h2>{pathName}</h2>
     </HeaderTitle>
   );
