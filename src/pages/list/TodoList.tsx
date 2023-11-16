@@ -3,9 +3,14 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import RedArrowIcon from '@/assets/RedArrowIcon';
+import FilterButton from '@/components/FilterButton';
+import { useRecoilValue } from 'recoil';
+import { todoFilterAtom } from '@/recoil/atom';
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
+  const filter = useRecoilValue(todoFilterAtom);
+
   const getTodoList = async () => {
     try {
       const response = await axios.get<TodoListResponse>('http://localhost:33088/api/todolist');
@@ -42,20 +47,33 @@ const TodoList = () => {
   }, []);
 
   return (
-    <TodoListContainer>
-      <ul>
-        {todoList?.map((todoItem) => (
-          <TodoItem key={todoItem._id} className={todoItem.done ? 'done' : ''}>
-            <div onClick={() => toggleCheckbox(todoItem._id, todoItem.done)}>
-              <input type="checkbox" id="checkbox" className={todoItem.done ? 'done' : ''} />
-              {todoItem.done ? <RedArrowIcon /> : null}
-            </div>
-            <Link to={`/info?_id=${todoItem._id}`}>{todoItem.title}</Link>
-          </TodoItem>
-        ))}
-      </ul>
-      <RegistButton to={'/regist'}>등록</RegistButton>
-    </TodoListContainer>
+    <>
+      <div>
+        <FilterButton value={'All'} />
+        <FilterButton value={'ing'} />
+        <FilterButton value={'Done'} />
+      </div>
+      <TodoListContainer>
+        <ul>
+          {todoList
+            ?.filter((todoItem) => {
+              if (filter === 'ing') return !todoItem.done;
+              if (filter === 'Done') return todoItem.done;
+              else return true;
+            })
+            .map((todoItem) => (
+              <TodoItem key={todoItem._id} className={todoItem.done ? 'done' : ''}>
+                <div onClick={() => toggleCheckbox(todoItem._id, todoItem.done)}>
+                  <input type="checkbox" id="checkbox" className={todoItem.done ? 'done' : ''} />
+                  {todoItem.done ? <RedArrowIcon /> : null}
+                </div>
+                <Link to={`/info?_id=${todoItem._id}`}>{todoItem.title}</Link>
+              </TodoItem>
+            ))}
+        </ul>
+        <RegistButton to={'/regist'}>등록</RegistButton>
+      </TodoListContainer>
+    </>
   );
 };
 

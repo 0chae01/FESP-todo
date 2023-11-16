@@ -22,3 +22,5 @@ interface TodoResponse {
   ok: number;
   item: TodoItem;
 }
+
+type TodoFilterType = 'All' | 'ing' | 'Done';
