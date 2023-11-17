@@ -9,3 +9,13 @@ export const todoSortAtom = atom<TodoSortType>({
   key: 'todoSortAtom',
   default: 'latest',
 });
+
+export const todoListAtom = atom<TodoItem[]>({
+  key: 'todoListAtom',
+  default: [],
+});
+
+export const todoSearchAtom = atom<string>({
+  key: 'todoSearchAtom',
+  default: '',
+});

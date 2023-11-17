@@ -1,16 +1,17 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import RedArrowIcon from '@/assets/RedArrowIcon';
 import FilterButton from '@/components/FilterButton';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { todoFilterAtom, todoSortAtom } from '@/recoil/atom';
+import { todoFilterAtom, todoListAtom, todoSearchAtom, todoSortAtom } from '@/recoil/atom';
 
 const TodoList = () => {
-  const [todoList, setTodoList] = useState<TodoItem[]>([]);
+  const [todoList, setTodoList] = useRecoilState(todoListAtom);
   const filter = useRecoilValue(todoFilterAtom);
   const [sortBy, setSortBy] = useRecoilState(todoSortAtom);
+  const searchValue = useRecoilValue(todoSearchAtom);
 
   const filterItems = (todoItem: TodoItem) => {
     if (filter === 'Active') return !todoItem.done;
@@ -23,12 +24,21 @@ const TodoList = () => {
     return sortBy === 'latest' ? latest : -latest;
   };
 
+  const searchItems = (todoItem: TodoItem) => {
+    // eslint-disable-next-line no-useless-escape
+    const regexr = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+    const title = todoItem.title?.replace(regexr, '').trim();
+    const content = todoItem.content?.replace(regexr, '').trim();
+    if (!searchValue) return true;
+    if (title?.includes(searchValue) || content?.includes(searchValue)) return true;
+  };
+
   const getTodoList = async () => {
     try {
       const response = await axios.get<TodoListResponse>('http://localhost:33088/api/todolist');
       if (response.data.ok) {
         const todoItems = response.data.items;
-        setTodoList(todoItems.filter(filterItems).sort(sortItems));
+        setTodoList(todoItems.filter(filterItems).sort(sortItems).filter(searchItems));
       }
       return response.data.items;
     } catch (err) {
@@ -59,7 +69,7 @@ const TodoList = () => {
 
   useEffect(() => {
     getTodoList();
-  }, [sortBy, filter]);
+  }, [sortBy, filter, searchValue]);
 
   return (
     <>

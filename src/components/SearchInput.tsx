@@ -1,21 +1,33 @@
+import useDebounce from '@/hooks/useDebounce';
+import { todoSearchAtom } from '@/recoil/atom';
 import { useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { styled } from 'styled-components';
 
 interface SearchInputProps {
   isSearchMode: boolean;
 }
 const SearchInput = ({ isSearchMode }: SearchInputProps) => {
-  const [searchValue, setSearchValue] = useState('');
+  const setSearchValue = useSetRecoilState(todoSearchAtom);
+  const [inputValue, setInputValue] = useState('');
+
+  const debouncedValue = useDebounce<string>({ value: inputValue, delay: 500 });
 
   useEffect(() => {
-    setSearchValue('');
+    setInputValue('');
   }, [isSearchMode]);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-useless-escape
+    const regexr = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+    isSearchMode && setSearchValue(debouncedValue.trim().replace(regexr, ''));
+  }, [debouncedValue]);
 
   return (
     <StyledSearchInput
       placeholder="검색어를 입력하세요."
-      value={searchValue}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
+      value={inputValue}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
     />
   );
 };
