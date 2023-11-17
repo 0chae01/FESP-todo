@@ -1,7 +1,8 @@
-import useDebounce from '@/hooks/useDebounce';
 import { todoSearchAtom } from '@/recoil/atom';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+import useDebounce from '@/hooks/useDebounce';
+import { DELAY_TIME } from '@/constants/debounce';
 import { styled } from 'styled-components';
 
 interface SearchInputProps {
@@ -11,7 +12,7 @@ const SearchInput = ({ isSearchMode }: SearchInputProps) => {
   const setSearchValue = useSetRecoilState(todoSearchAtom);
   const [inputValue, setInputValue] = useState('');
 
-  const debouncedValue = useDebounce<string>({ value: inputValue, delay: 500 });
+  const debouncedValue = useDebounce<string>({ value: inputValue, delay: DELAY_TIME });
 
   useEffect(() => {
     setInputValue('');
