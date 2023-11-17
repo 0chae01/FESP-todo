@@ -96,7 +96,7 @@ const TodoList = () => {
                 />
                 {todoItem.done ? <RedArrowIcon /> : null}
               </div>
-              <Link to={`/info?_id=${todoItem._id}`}>{todoItem.title}</Link>
+              <Link to={`/info/${todoItem._id}`}>{todoItem.title}</Link>
             </TodoItem>
           ))}
         </ul>
