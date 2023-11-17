@@ -76,8 +76,7 @@ const HeaderContainer = styled.header`
 const SearchIconContainer = styled.button`
   color: ${(props) => (props.className === 'true' ? '#fff' : 'gray')};
   background-color: ${(props) => (props.className === 'true' ? '#015ecc' : '#ececec')};
-  padding: 7px 10px;
-  margin-top: 4px;
+  padding: 8px 10px;
   border: none;
   border-radius: 100%;
   cursor: pointer;
