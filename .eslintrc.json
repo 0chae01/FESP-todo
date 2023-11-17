@@ -21,6 +21,7 @@
     "no-duplicate-imports": "error",
     "no-console": ["warn", { "allow": ["warn", "error", "info"] }],
     "no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": "warn",
     "no-multiple-empty-lines": "error",
     "react/react-in-jsx-scope": "off"
   },
