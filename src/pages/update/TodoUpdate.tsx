@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import instance from '@/api/instance';
 
 const TodoUpdate = () => {
   const [todo, setTodo] = useState({ title: '', content: '', updatedAt: '' });
@@ -11,7 +11,7 @@ const TodoUpdate = () => {
   useEffect(() => {
     const fetchTodo = async () => {
       try {
-        const response = await axios.get(`http://localhost:33088/api/todolist/${_id}`);
+        const response = await instance.get(`/${_id}`);
         setTodo({
           title: response.data.item.title,
           content: response.data.item.content,
@@ -29,7 +29,7 @@ const TodoUpdate = () => {
     e.preventDefault();
 
     try {
-      await axios.patch(`http://localhost:33088/api/todolist/${_id}`, {
+      await instance.patch(`/${_id}`, {
         title: todo.title,
         content: todo.content,
       });
@@ -58,7 +58,7 @@ const TodoUpdate = () => {
         />
         <DetailFooter>
           <button type="submit">수정하기</button>
-          <Link to={`/info?_id=${_id}`}>돌아가기</Link>
+          <Link to={`/info/${_id}`}>돌아가기</Link>
         </DetailFooter>
       </DetailForm>
     </Content>

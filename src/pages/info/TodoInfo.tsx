@@ -1,4 +1,4 @@
-import axios from 'axios';
+import instance from '@/api/instance';
 import { useEffect, useState } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -9,7 +9,7 @@ const TodoInfo = () => {
   const [todoItem, setTodoItem] = useState<TodoItem | null>(null);
   const getTodoItem = async (_id: string) => {
     try {
-      const response = await axios.get<TodoResponse>(`http://localhost:33088/api/todolist/${_id}`);
+      const response = await instance.get<TodoResponse>(`/${_id}`);
       setTodoItem(response.data.item);
     } catch (err) {
       console.error(err);
@@ -17,11 +17,9 @@ const TodoInfo = () => {
     }
   };
 
-  const deleteTodoItem = async (_id: string) => {
+  const deleteTodoItem = async (_id: number) => {
     if (confirm('삭제하시겠습니까?')) {
-      const response = await axios.delete<TodoResponse>(
-        `http://localhost:33088/api/todolist/${_id}`
-      );
+      const response = await instance.delete<TodoResponse>(`/${_id}`);
       if (response.data.ok) {
         return navigate('/', { replace: true });
       }
@@ -29,7 +27,7 @@ const TodoInfo = () => {
     }
   };
 
-  const handleDelete = (_id: string | undefined) => {
+  const handleDelete = (_id: number | undefined) => {
     if (_id) {
       deleteTodoItem(_id);
     } else {
@@ -56,7 +54,7 @@ const TodoInfo = () => {
       </DetailMain>
       <DetailFooter>
         <Link to={`/update/${todoItem?._id}`}>수정</Link>
-        <button onClick={() => handleDelete(todoItem?._id.toString())}>삭제</button>
+        <button onClick={() => handleDelete(todoItem?._id)}>삭제</button>
       </DetailFooter>
     </DetailContainer>
   );

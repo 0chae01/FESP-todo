@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import instance from '@/api/instance';
 
 const TodoRegist = () => {
   const [title, setTitle] = useState('');
@@ -12,7 +12,7 @@ const TodoRegist = () => {
     e.preventDefault();
 
     try {
-      await axios.post('http://localhost:33088/api/todolist', { title, content });
+      await instance.post('', { title, content });
       alert('할일이 등록되었습니다!');
       navigate('/');
     } catch (error) {

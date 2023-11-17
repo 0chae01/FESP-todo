@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,6 +5,7 @@ import RedArrowIcon from '@/assets/RedArrowIcon';
 import FilterButton from '@/components/FilterButton';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { todoFilterAtom, todoListAtom, todoSearchAtom, todoSortAtom } from '@/recoil/atom';
+import instance from '@/api/instance';
 
 const TodoList = () => {
   const [todoList, setTodoList] = useRecoilState(todoListAtom);
@@ -35,7 +35,7 @@ const TodoList = () => {
 
   const getTodoList = async () => {
     try {
-      const response = await axios.get<TodoListResponse>('http://localhost:33088/api/todolist');
+      const response = await instance.get<TodoListResponse>('');
       if (response.data.ok) {
         const todoItems = response.data.items;
         setTodoList(todoItems.filter(filterItems).sort(sortItems).filter(searchItems));
@@ -49,12 +49,9 @@ const TodoList = () => {
 
   const patchTodoList = async (_id: number, done: boolean) => {
     try {
-      const response = await axios.patch<TodoResponse>(
-        `http://localhost:33088/api/todolist/${_id}`,
-        {
-          done: !done,
-        }
-      );
+      const response = await instance.patch<TodoResponse>(`/${_id}`, {
+        done: !done,
+      });
       return response.data;
     } catch (err) {
       console.error(err);
