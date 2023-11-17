@@ -19,9 +19,8 @@ const SearchInput = ({ isSearchMode }: SearchInputProps) => {
   }, [isSearchMode]);
 
   useEffect(() => {
-    // eslint-disable-next-line no-useless-escape
-    const regexr = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-    isSearchMode && setSearchValue(debouncedValue.trim().replace(regexr, ''));
+    const regex = /\s/g;
+    isSearchMode && setSearchValue(debouncedValue.replace(regex, ''));
   }, [debouncedValue]);
 
   return (

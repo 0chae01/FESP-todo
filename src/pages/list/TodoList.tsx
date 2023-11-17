@@ -25,12 +25,15 @@ const TodoList = () => {
   };
 
   const searchItems = (todoItem: TodoItem) => {
-    // eslint-disable-next-line no-useless-escape
-    const regexr = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-    const title = todoItem.title?.replace(regexr, '').trim();
-    const content = todoItem.content?.replace(regexr, '').trim();
+    const regex = /\s/g;
+    const title = todoItem.title?.replace(regex, '');
+    const content = todoItem.content?.replace(regex, '');
     if (!searchValue) return true;
-    if (title?.includes(searchValue) || content?.includes(searchValue)) return true;
+    if (
+      title?.includes(searchValue.replace(regex, '')) ||
+      content?.includes(searchValue.replace(regex, ''))
+    )
+      return true;
   };
 
   const getTodoList = async () => {
