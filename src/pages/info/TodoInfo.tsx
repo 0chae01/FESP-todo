@@ -6,41 +6,33 @@ import styled from 'styled-components';
 const TodoInfo = () => {
   const { _id } = useParams();
   const navigate = useNavigate();
-  const [todoItem, setTodoItem] = useState<TodoItem | null>(null);
-  const getTodoItem = async (_id: string) => {
+  const [todoItem, setTodoItem] = useState<TodoItem>();
+
+  const fetchTodoItem = async (_id: string) => {
     try {
       const response = await instance.get<TodoResponse>(`/${_id}`);
-      setTodoItem(response.data.item);
+      if (response.data.ok) setTodoItem(response.data.item);
     } catch (err) {
       console.error(err);
-      return navigate('/error', { replace: true });
+      alert('항목을 불러오는 데 실패했습니다.');
+      return navigate('/', { replace: true });
     }
   };
 
-  const deleteTodoItem = async (_id: number) => {
+  const deleteTodoItem = async (_id: string | undefined) => {
+    if (!_id) return navigate('/', { replace: true });
     if (confirm('삭제하시겠습니까?')) {
       const response = await instance.delete<TodoResponse>(`/${_id}`);
       if (response.data.ok) {
         return navigate('/', { replace: true });
       }
-      alert('삭제 실패했습니다.');
-    }
-  };
-
-  const handleDelete = (_id: number | undefined) => {
-    if (_id) {
-      deleteTodoItem(_id);
-    } else {
-      return navigate('/error', { replace: true });
+      alert('삭제에 실패했습니다.');
     }
   };
 
   useEffect(() => {
-    if (!_id) {
-      setTodoItem(null);
-      return navigate('/error', { replace: true });
-    }
-    getTodoItem(_id);
+    if (!_id) return navigate('/', { replace: true });
+    fetchTodoItem(_id);
   }, []);
 
   return (
@@ -54,7 +46,7 @@ const TodoInfo = () => {
       </DetailMain>
       <DetailFooter>
         <Link to={`/update/${todoItem?._id}`}>수정</Link>
-        <button onClick={() => handleDelete(todoItem?._id)}>삭제</button>
+        <button onClick={() => deleteTodoItem(_id)}>삭제</button>
       </DetailFooter>
     </DetailContainer>
   );

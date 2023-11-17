@@ -4,57 +4,59 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import instance from '@/api/instance';
 
 const TodoUpdate = () => {
-  const [todo, setTodo] = useState({ title: '', content: '', updatedAt: '' });
   const { _id } = useParams();
   const navigate = useNavigate();
+  const [titleInput, setTitleInput] = useState('');
+  const [contentInput, setContentInput] = useState('');
 
-  useEffect(() => {
-    const fetchTodo = async () => {
-      try {
-        const response = await instance.get<TodoResponse>(`/${_id}`);
-        setTodo({
-          title: response.data.item.title,
-          content: response.data.item.content,
-          updatedAt: response.data.item.updatedAt,
-        });
-      } catch (err) {
-        console.error(err);
-        alert('항목을 불러오는 데 실패했습니다.');
-      }
-    };
-    fetchTodo();
-  }, [_id]);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const fetchTodoItem = async (_id: string) => {
     try {
-      await instance.patch<TodoResponse>(`/${_id}`, {
-        title: todo.title,
-        content: todo.content,
+      const response = await instance.get<TodoResponse>(`/${_id}`);
+      const { title, content } = response.data.item;
+      setTitleInput(title);
+      setContentInput(content);
+    } catch (err) {
+      console.error(err);
+      alert('항목을 불러오는 데 실패했습니다.');
+      return navigate('/', { replace: true });
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      instance.patch<TodoResponse>(`/${_id}`, {
+        title: titleInput,
+        content: contentInput,
       });
       alert('수정되었습니다.');
       navigate('/');
     } catch (err) {
       console.error(err);
-      alert('서버 오류!');
+      alert('수정에 실패했습니다. 다시 시도해주세요.');
     }
   };
+
+  useEffect(() => {
+    if (!_id) return navigate('/', { replace: true });
+    fetchTodoItem(_id);
+  }, []);
+
   return (
     <Content>
       <DetailForm id="detail" onSubmit={handleSubmit}>
         <DetailTitle
           autoFocus
           required
-          value={todo.title}
+          value={titleInput}
           placeholder="제목을 입력해주세요."
-          onChange={(e) => setTodo({ ...todo, title: e.target.value })}
+          onChange={(e) => setTitleInput(e.target.value)}
         />
         <DetailTextArea
           name="content"
           placeholder="내용을 입력해주세요."
-          value={todo.content}
-          onChange={(e) => setTodo({ ...todo, content: e.target.value })}
+          value={contentInput}
+          onChange={(e) => setContentInput(e.target.value)}
         />
         <DetailFooter>
           <button type="submit">수정하기</button>
