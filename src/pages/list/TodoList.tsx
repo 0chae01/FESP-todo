@@ -12,13 +12,28 @@ const TodoList = () => {
   const filter = useRecoilValue(todoFilterAtom);
   const [sortBy, setSortBy] = useRecoilState(todoSortAtom);
 
+  const filterItems = (todoItem: TodoItem) => {
+    if (filter === 'Active') return !todoItem.done;
+    if (filter === 'Done') return todoItem.done;
+    else return true;
+  };
+
+  const sortItems = (a: TodoItem, b: TodoItem) => {
+    const latest = new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    return sortBy === 'latest' ? latest : -latest;
+  };
+
   const getTodoList = async () => {
     try {
       const response = await axios.get<TodoListResponse>('http://localhost:33088/api/todolist');
-      if (response.data.ok === 1) return response.data.items;
+      if (response.data.ok) {
+        const todoItems = response.data.items;
+        setTodoList(todoItems.filter(filterItems).sort(sortItems));
+      }
+      return response.data.items;
     } catch (err) {
       console.error(err);
-      return alert('불러오기에 실패했습니다. 다시 실행해주세요.');
+      return alert('데이터를 불러오는 데 실패했습니다.');
     }
   };
 
@@ -39,22 +54,12 @@ const TodoList = () => {
 
   const toggleCheckbox = async (_id: number, done: boolean) => {
     const data = await patchTodoList(_id, done);
-    if (data) {
-      const todoItems = await getTodoList();
-      todoItems && setTodoList(todoItems);
-    }
-  };
-
-  const sortItems = (a: TodoItem, b: TodoItem) => {
-    const latest = new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-    return sortBy === 'latest' ? latest : -latest;
+    if (data) getTodoList();
   };
 
   useEffect(() => {
-    getTodoList().then((todoItems) => {
-      todoItems && setTodoList(todoItems.sort(sortItems));
-    });
-  }, []);
+    getTodoList();
+  }, [sortBy, filter]);
 
   return (
     <>
@@ -71,26 +76,19 @@ const TodoList = () => {
       <TodoListContainer>
         <RegistButton to={'/regist'}>+</RegistButton>
         <ul>
-          {todoList
-            ?.filter((todoItem) => {
-              if (filter === 'Active') return !todoItem.done;
-              if (filter === 'Done') return todoItem.done;
-              else return true;
-            })
-            .sort(sortItems)
-            .map((todoItem) => (
-              <TodoItem key={todoItem._id} className={todoItem.done ? 'done' : ''}>
-                <div onClick={() => toggleCheckbox(todoItem._id, todoItem.done)}>
-                  <input
-                    type="checkbox"
-                    id={todoItem._id.toString()}
-                    className={todoItem.done ? 'done' : ''}
-                  />
-                  {todoItem.done ? <RedArrowIcon /> : null}
-                </div>
-                <Link to={`/info?_id=${todoItem._id}`}>{todoItem.title}</Link>
-              </TodoItem>
-            ))}
+          {todoList.map((todoItem) => (
+            <TodoItem key={todoItem._id} className={todoItem.done ? 'done' : ''}>
+              <div onClick={() => toggleCheckbox(todoItem._id, todoItem.done)}>
+                <input
+                  type="checkbox"
+                  id={todoItem._id.toString()}
+                  className={todoItem.done ? 'done' : ''}
+                />
+                {todoItem.done ? <RedArrowIcon /> : null}
+              </div>
+              <Link to={`/info?_id=${todoItem._id}`}>{todoItem.title}</Link>
+            </TodoItem>
+          ))}
         </ul>
       </TodoListContainer>
     </>
