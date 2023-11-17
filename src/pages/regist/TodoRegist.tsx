@@ -12,7 +12,7 @@ const TodoRegist = () => {
     e.preventDefault();
 
     try {
-      await instance.post('', { title, content });
+      await instance.post<TodoResponse>('', { title, content });
       alert('할일이 등록되었습니다!');
       navigate('/');
     } catch (error) {

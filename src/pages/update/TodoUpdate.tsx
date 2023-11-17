@@ -11,7 +11,7 @@ const TodoUpdate = () => {
   useEffect(() => {
     const fetchTodo = async () => {
       try {
-        const response = await instance.get(`/${_id}`);
+        const response = await instance.get<TodoResponse>(`/${_id}`);
         setTodo({
           title: response.data.item.title,
           content: response.data.item.content,
@@ -29,7 +29,7 @@ const TodoUpdate = () => {
     e.preventDefault();
 
     try {
-      await instance.patch(`/${_id}`, {
+      await instance.patch<TodoResponse>(`/${_id}`, {
         title: todo.title,
         content: todo.content,
       });
